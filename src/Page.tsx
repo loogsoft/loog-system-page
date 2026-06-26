@@ -9,6 +9,7 @@ import banner6 from "./assets/banner/img6.png";
 import banner7 from "./assets/banner/img7.png";
 import banner8 from "./assets/banner/img8.png";
 import banner9 from "./assets/banner/img9.png";
+import loogMarkIcon from "./assets/logo/loog-mark-icon.png";
 import { cssColorVariables } from "./colors";
 
 type IconName =
@@ -141,9 +142,21 @@ const testimonials = [
 ];
 
 const faqs = [
-  "O sistema precisa ser instalado no computador?",
-  "Meus dados estão seguros?",
-  "O suporte é incluso na mensalidade?",
+  {
+    question: "O sistema precisa ser instalado no computador?",
+    answer:
+      "Não. O Loog System é um sistema web: você acessa direto pelo navegador, sem instalação. Basta ter internet para entrar na sua conta e gerenciar sua loja.",
+  },
+  {
+    question: "Meus dados estão seguros?",
+    answer:
+      "Sim. Seus dados ficam centralizados no sistema, com acesso por login e senha, reduzindo o risco de perda de informações em cadernos, planilhas soltas ou controles manuais.",
+  },
+  {
+    question: "O suporte é incluso na mensalidade?",
+    answer:
+      "Sim. O suporte está incluso na mensalidade e acompanha você em tempo total para tirar dúvidas, orientar o uso do sistema e ajudar sua loja a começar com segurança.",
+  },
 ];
 
 const systemSlides = [
@@ -229,10 +242,10 @@ function Header() {
     <header className="site-header">
       <div className="site-header__inner">
         <a className="brand" href="#top" aria-label="Loog System">
-          <span className="brand__mark" aria-hidden="true">
-            <LogoMark />
+          <span className="brand__mark" aria-hidden="true" style={{width:40, height:40}}>
+            <img src={loogMarkIcon} alt=""/>
           </span>
-          <span>Loog System</span>
+          <span style={{fontSize:20}}>Loog System</span>
         </a>
 
         <nav className="main-nav" aria-label="Navegação principal">
@@ -430,7 +443,9 @@ function SystemPreviewSection() {
 
   useEffect(() => {
     const timer = window.setInterval(() => {
-      setActiveSlide((currentSlide) => (currentSlide + 1) % systemSlides.length);
+      setActiveSlide(
+        (currentSlide) => (currentSlide + 1) % systemSlides.length,
+      );
     }, 6500);
 
     return () => window.clearInterval(timer);
@@ -464,7 +479,10 @@ function SystemPreviewSection() {
           </div>
         </div>
 
-        <div className="system-carousel" aria-label="Apresentação das telas do sistema">
+        <div
+          className="system-carousel"
+          aria-label="Apresentação das telas do sistema"
+        >
           <div className="system-carousel__toolbar">
             <div>
               <span>{String(activeSlide + 1).padStart(2, "0")}</span>
@@ -500,7 +518,10 @@ function SystemPreviewSection() {
             <span style={{ width: `${progress}%` }} />
           </div>
 
-          <div className="system-carousel__thumbs" aria-label="Selecionar tela do sistema">
+          <div
+            className="system-carousel__thumbs"
+            aria-label="Selecionar tela do sistema"
+          >
             {systemSlides.map((item, index) => (
               <button
                 className={`carousel-thumb${index === activeSlide ? " carousel-thumb--active" : ""}`}
@@ -626,7 +647,9 @@ function TransformationSection() {
             <Icon name="check" /> Com o Loog System
           </h3>
           <ul>
-            <li>Gestão alinhada de estoque, financeiro e equipe em um só lugar.</li>
+            <li>
+              Gestão alinhada de estoque, financeiro e equipe em um só lugar.
+            </li>
             <li>Estoque 100% auditável com automação fácil.</li>
             <li>Controle de clientes, vencimentos e histórico de vendas.</li>
           </ul>
@@ -677,7 +700,11 @@ function MainCallToAction() {
           parado em até 38% nos primeiros meses.
         </p>
         <div className="cta-card__actions">
-          <a className="button button--light" href="#comecar">
+          <a
+            className="button button--light"
+            href="https://admin.loogsystem.com.br/login"
+            target="_blank"
+          >
             Começar Agora
           </a>
           <a className="button button--outline" href="#demo">
@@ -690,18 +717,35 @@ function MainCallToAction() {
 }
 
 function FaqSection() {
+  const [openFaq, setOpenFaq] = useState(0);
+
   return (
     <section className="section section--softest" id="suporte">
       <div className="section-heading">
         <h2>Perguntas Frequentes</h2>
       </div>
       <div className="faq-list">
-        {faqs.map((faq) => (
-          <button className="faq-item" type="button" key={faq}>
-            <span>{faq}</span>
-            <Icon name="chevron" />
-          </button>
-        ))}
+        {faqs.map((faq, index) => {
+          const isOpen = openFaq === index;
+
+          return (
+            <article
+              className={`faq-card${isOpen ? " faq-card--open" : ""}`}
+              key={faq.question}
+            >
+              <button
+                className="faq-item"
+                type="button"
+                onClick={() => setOpenFaq(isOpen ? -1 : index)}
+                aria-expanded={isOpen}
+              >
+                <span>{faq.question}</span>
+                <Icon name="chevron" />
+              </button>
+              {isOpen ? <p className="faq-answer">{faq.answer}</p> : null}
+            </article>
+          );
+        })}
       </div>
     </section>
   );
@@ -715,7 +759,11 @@ function FinalCallToAction() {
         Junte-se a centenas de lojistas que já transformaram suas operações com
         o Loog System.
       </p>
-      <a className="button button--primary" href="#comecar">
+      <a
+        className="button button--primary"
+        href="https://admin.loogsystem.com.br/login"
+        target="_blank"
+      >
         Começar Agora
       </a>
     </section>
@@ -730,7 +778,7 @@ function Footer() {
         <div className="footer__brand">
           <a className="brand" href="#top" aria-label="Loog System">
             <span className="brand__mark" aria-hidden="true">
-              <LogoMark />
+              <img src={loogMarkIcon} alt="" />
             </span>
             <span>Loog System</span>
           </a>
@@ -825,7 +873,10 @@ function DashboardMock({ variant }: { variant: "analytics" | "inventory" }) {
   const isAnalytics = variant === "analytics";
 
   return (
-    <div className={`dashboard-mock dashboard-mock--${variant}`} aria-hidden="true">
+    <div
+      className={`dashboard-mock dashboard-mock--${variant}`}
+      aria-hidden="true"
+    >
       <div className="dashboard-window">
         <div className="dashboard-window__sidebar">
           <span />
@@ -869,15 +920,6 @@ function DashboardMock({ variant }: { variant: "analytics" | "inventory" }) {
         </div>
       </div>
     </div>
-  );
-}
-
-function LogoMark() {
-  return (
-    <svg viewBox="0 0 24 24" role="img" aria-label="Loog">
-      <path d="M12 2.8 4.7 7v8.3L12 21l7.3-5.7V7L12 2.8Z" />
-      <path d="M8.6 9.3 12 7.4l3.4 1.9v4.4L12 16.1l-3.4-2.4V9.3Z" />
-    </svg>
   );
 }
 
@@ -990,7 +1032,9 @@ function renderIcon(name: IconName) {
         </>
       );
     case "star":
-      return <path d="m12 4 2.3 4.7 5.2.7-3.8 3.7.9 5.2-4.6-2.5-4.6 2.5.9-5.2-3.8-3.7 5.2-.7L12 4Z" />;
+      return (
+        <path d="m12 4 2.3 4.7 5.2.7-3.8 3.7.9 5.2-4.6-2.5-4.6 2.5.9-5.2-3.8-3.7 5.2-.7L12 4Z" />
+      );
     case "tag":
       return (
         <>
